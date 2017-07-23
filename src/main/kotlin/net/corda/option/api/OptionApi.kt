@@ -32,7 +32,7 @@ val SERVICE_NODE_NAMES = listOf(
 
 /**
  * This API is accessible from /api/option. The endpoint paths specified below are relative to it.
- * We've defined a bunch of endpoints to deal with IOUs, cash and the various operations you can perform with them.
+ * We've defined a bunch of endpoints to deal with options, IOUs, cash and the various operations you can perform with them.
  */
 @Path("option")
 class OptionApi(val services: CordaRPCOps) {
@@ -121,10 +121,10 @@ class OptionApi(val services: CordaRPCOps) {
         val party = services.partyFromX500Name(X500Name(counterparty)) ?: throw IllegalArgumentException("Unknown party name.")
         val expiryInstant = LocalDate.parse(expiry).atStartOfDay().toInstant(ZoneOffset.UTC)
         val optType = if (optionType.equals("CALL")) OptionType.CALL else OptionType.PUT
-        // Create a new IOU state using the parameters given.
+        // Create a new Option state using the parameters given.
         val state = OptionState(Amount(strike.toLong() * 100, Currency.getInstance(currency)), expiryInstant, underlying, Currency.getInstance(currency), me, party, optType)
 
-        // Start the IOUIssueFlow. We block and wait for the flow to return.
+        // Start the OptionIssueFlow. We block and wait for the flow to return.
         val (status, message) = try {
             val flowHandle = services.startTrackedFlowDynamic(OptionIssueFlow.Initiator::class.java, state)
             val result = flowHandle.use { it.returnValue.getOrThrow() }
@@ -154,9 +154,9 @@ class OptionApi(val services: CordaRPCOps) {
         // Get party objects for myself and the counterparty.
         val me = services.nodeIdentity().legalIdentity
         val party = services.partyFromX500Name(X500Name(counterparty)) ?: throw IllegalArgumentException("Unknown party name.")
-        // Create a new IOU state using the parameters given.
+        // Create a new Option state using the parameters given.
         val state = OptionState(Amount(amount.toLong() * 100, Currency.getInstance(currency)), expiry, underlying, Currency.getInstance(currency), me, party, optionType)
-        // Start the IOUIssueFlow. We block and waits for the flow to return.
+        // Start the OptionIssueFlow. We block and waits for the flow to return.
         try {
             val result = services.startFlowDynamic(OptionIssueFlow.Initiator::class.java, state).returnValue.get()
             // Return the response.
@@ -196,7 +196,7 @@ class OptionApi(val services: CordaRPCOps) {
     }
 
     /**
-     * Settles an IOU. Requires cash in the right currency to be able to settle.
+     * Exercises an option. Creates an IOU to settle the option.
      */
     @GET
     @Path("exercise-option")
