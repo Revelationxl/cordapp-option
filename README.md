@@ -2,7 +2,7 @@
 
 # Option CorDapp Version 1
 
-This repo contains a CorDapp representing an Equity Option. The following features have been added:
+This repo contains a CorDapp representing an OTC Equity Option. The following features have been added:
 
 * The code has been rebased to Corda M12.1
 * Nodes can self issue cash
@@ -41,5 +41,3 @@ Via the web:
 Navigate to http://localhost:PORT/web/iou to use the web interface where PORT typically starts at 10007 for NodeA, double check the node terminal window or the build.gradle file for port numbers.
 
 Via the node shell from any node which is not the **Controller**: 
-
-1. Use `flow start SelfIssueCashFlow amount: X, currency: GBP` to issue cash.
