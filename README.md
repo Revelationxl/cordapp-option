@@ -7,7 +7,7 @@ This repo contains a CorDapp representing an OTC Equity Option. The following fe
 * The code has been rebased to Corda M12.1
 * Nodes can self issue cash
 * Nodes can transfer Options to other nodes
-* Node's can exercise options with payment settled in the form of a debt obligation.
+* Node's can exercise Options with payment settled in the form of an obligation
 * The web UI facilitates issuance, transferance and exercising of Options
 
 # Assumptions
